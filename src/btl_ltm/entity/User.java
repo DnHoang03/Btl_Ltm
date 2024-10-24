@@ -15,6 +15,8 @@ public class User {
     private Integer score;
     private Integer match;
 
+    public User() {}
+    
     public User(Integer id, String username, String password, Integer score, Integer match) {
         this.id = id;
         this.username = username;
