@@ -19,8 +19,8 @@ public class DbContext<T> {
             // Load the JDBC driver
             Class.forName("com.mysql.cj.jdbc.Driver");
             // Set up the connection properties
-            String dbURL = "jdbc:mysql://localhost:3306/employee_management";
-            String username = "root";
+            String dbURL = "jdbc:mysql://localhost:3306/duckie";
+            String username = "duckie";
             String password = "root";
             Connection connection = DriverManager.getConnection(dbURL, username, password);
             System.out.println("Connect database successfully");
