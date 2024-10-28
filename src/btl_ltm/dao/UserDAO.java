@@ -18,4 +18,16 @@ public class UserDAO extends DbContext<User>{
         String sql = "SELECT * FROM Users";
         return query(sql, new UserMapper());
     }
+    
+    public User getUserByUserNamePassword(String user, String pass){
+        String query = "SELECT * FROM users WHERE username = ? AND password = ? LIMIT 1";
+        List<User> users = query(query, new UserMapper(), user, pass);
+        
+        return users == null ? null : users.get(0);
+    }
+    
+    public void InsertUser(String user, String pass) {
+        String query = "INSERT INTO users(username, password) value(?,?) ";
+        insert(query,new UserMapper(),user,pass);
+    }
 }

@@ -4,11 +4,13 @@
  */
 package btl_ltm.entity;
 
+import java.io.Serializable;
+
 /**
  *
  * @author duckii
  */
-public class UserLogin {
+public class UserLogin implements Serializable{
     private String user;
     private String password;
 

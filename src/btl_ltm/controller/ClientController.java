@@ -39,6 +39,7 @@ public class ClientController {
 
             ObjectOutputStream oos
                     = new ObjectOutputStream(mySocket.getOutputStream());
+            oos.writeObject("login");
             oos.writeObject(user);
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -48,22 +49,35 @@ public class ClientController {
         return true;
     }
 
-    public String receiveData() {
-        String result = null;
+    public boolean sendDataRegister(UserLogin user) {
+        try {
+
+            ObjectOutputStream oos
+                    = new ObjectOutputStream(mySocket.getOutputStream());
+            oos.writeObject("register");
+            oos.flush();
+            oos.writeObject(user);
+            oos.flush();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return false;
+        }
+
+        return true;
+    }
+
+    public String receiveDataAuth() {
         try {
             ObjectInputStream ois
                     = new ObjectInputStream(mySocket.getInputStream());
             Object o = ois.readObject();
-            if (o instanceof String) {
-                result = (String) o;
-            }
-
+            String res = (String) o;
+            System.out.println(res);
+            return res;
         } catch (Exception ex) {
             ex.printStackTrace();
             return null;
         }
-
-        return result;
     }
 
     public boolean closeConnection() {

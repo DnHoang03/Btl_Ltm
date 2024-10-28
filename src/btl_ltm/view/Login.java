@@ -4,15 +4,17 @@
  */
 package btl_ltm.view;
 
+import btl_ltm.controller.ClientController;
 import btl_ltm.entity.User;
 import btl_ltm.entity.UserLogin;
 import java.awt.event.ActionListener;
+import javax.swing.JOptionPane;
 
 /**
  *
  * @author duckii
  */
-public class Login extends javax.swing.JFrame{
+public class Login extends javax.swing.JFrame {
 
     /**
      * Creates new form Login
@@ -111,9 +113,21 @@ public class Login extends javax.swing.JFrame{
 
     private void submitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submitButtonActionPerformed
         // TODO add your handling code here:
-        UserLogin user = new UserLogin(userTxt.getText(),passwordTxt.getText());
-        
+        UserLogin user = new UserLogin(userTxt.getText(), passwordTxt.getText());
+        ClientController clientCtr = new ClientController();
+        clientCtr.openConnection();
+        clientCtr.sendDataLogin(user);
+        String result = clientCtr.receiveDataAuth();
+        if (result.equals("ok")) {
+            showMessage("Login succesfully!");
+        } else {
+            showMessage("Invalid username and/or password!");
+        }
+        clientCtr.closeConnection();
     }//GEN-LAST:event_submitButtonActionPerformed
+    public void showMessage(String msg) {
+        JOptionPane.showMessageDialog(this, msg);
+    }
 
     /**
      * @param args the command line arguments

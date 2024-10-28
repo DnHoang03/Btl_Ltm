@@ -1,6 +1,8 @@
 
 import btl_ltm.dao.UserDAO;
 import btl_ltm.entity.User;
+import btl_ltm.view.Login;
+import btl_ltm.view.Register;
 import java.util.*;
 
 /*
@@ -14,7 +16,7 @@ import java.util.*;
  */
 public class ClientRun {
     public static void main(String[] args) {
-        UserDAO dao = new UserDAO();
-        List<User> users = dao.findAll();
+        Login view = new Login();
+        view.setVisible(true);
     }
 }
