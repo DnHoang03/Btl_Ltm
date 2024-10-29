@@ -1,8 +1,10 @@
 
 import btl_ltm.dao.UserDAO;
 import btl_ltm.entity.User;
+import btl_ltm.view.DisplayColor;
 import btl_ltm.view.Login;
 import btl_ltm.view.Register;
+import java.awt.Color;
 import java.util.*;
 
 /*
@@ -16,7 +18,11 @@ import java.util.*;
  */
 public class ClientRun {
     public static void main(String[] args) {
-        Login view = new Login();
-        view.setVisible(true);
+        List<Color> colors = new ArrayList<>();
+        colors.add(new Color(1, 1, 1));
+        colors.add(new Color(55, 55, 55));
+        colors.add(new Color(100, 100, 100));
+        DisplayColor dis = new DisplayColor(colors);
+        dis.setVisible(true);
     }
 }

@@ -1,90 +1,37 @@
-##############################
-## Java
-##############################
-.mtj.tmp/
+# NetBeans specific files
+nbproject/private/
+nbproject/Makefile-Debug.mk
+nbproject/Makefile-Release.mk
+nbproject/Makefile-Default.mk
+nbproject/project.properties
+nbproject/build-impl.xml
+
+# Build output
+/build/
+dist/
 *.class
+
+# IDE configuration files
+*.iml
+*.log
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Database files
+data/mysql.sock
+*.db
+
+# Other files
 *.jar
 *.war
 *.ear
-*.nar
-hs_err_pid*
-replay_pid*
+*.zip
+*.tar.gz
 
-##############################
-## Maven
-##############################
-target/
-pom.xml.tag
-pom.xml.releaseBackup
-pom.xml.versionsBackup
-pom.xml.next
-pom.xml.bak
-release.properties
-dependency-reduced-pom.xml
-buildNumber.properties
-.mvn/timing.properties
-.mvn/wrapper/maven-wrapper.jar
-
-##############################
-## Gradle
-##############################
-bin/
-build/
-.gradle
-.gradletasknamecache
-gradle-app.setting
-!gradle-wrapper.jar
-
-##############################
-## IntelliJ
-##############################
-out/
-.idea/
-.idea_modules/
-*.iml
-*.ipr
-*.iws
-
-##############################
-## Eclipse
-##############################
-.settings/
-bin/
-tmp/
-.metadata
-.classpath
-.project
+# Temporary files
 *.tmp
-*.bak
+*.temp
 *.swp
-*~.nib
-local.properties
-.loadpath
-.factorypath
-
-##############################
-## NetBeans
-##############################
-nbproject/private/
-build/
-nbbuild/
-dist/
-nbdist/
-nbactions.xml
-nb-configuration.xml
-
-##############################
-## Visual Studio Code
-##############################
-.vscode/
-.code-workspace
-
-##############################
-## OS X
-##############################
-.DS_Store
-
-##############################
-## Miscellaneous
-##############################
-*.log
+*.swo

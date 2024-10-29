@@ -10,5 +10,5 @@ import java.sql.ResultSet;
  * @author Admin
  */
 public interface RowMapper<T> {
-	T mapRow(ResultSet rs);
+    T mapRow(ResultSet rs);
 }
