@@ -6,8 +6,13 @@
             <file>file:/C:/Users/Admin/Documents/NetBeansProjects/Btl_Ltm/src/btl_ltm/view/PredictColor.java</file>
             <file>file:/C:/Users/Admin/Documents/NetBeansProjects/Btl_Ltm/src/btl_ltm/Btl_Ltm.java</file>
             <file>file:/C:/Users/Admin/Documents/NetBeansProjects/Btl_Ltm/src/btl_ltm/view/DisplayColor.java</file>
+            <file>file:/C:/Users/Admin/Documents/NetBeansProjects/Btl_Ltm/src/btl_ltm/mapper/UserMapper.java</file>
             <file>file:/C:/Users/Admin/Documents/NetBeansProjects/Btl_Ltm/src/btl_ltm/view/menu.java</file>
+            <file>file:/C:/Users/Admin/Documents/NetBeansProjects/Btl_Ltm/src/btl_ltm/dao/DbContext.java</file>
             <file>file:/C:/Users/Admin/Documents/NetBeansProjects/Btl_Ltm/src/btl_ltm/view/win.java</file>
+            <file>file:/C:/Users/Admin/Documents/NetBeansProjects/Btl_Ltm/src/btl_ltm/dao/UserDAO.java</file>
+            <file>file:/C:/Users/Admin/Documents/NetBeansProjects/Btl_Ltm/src/btl_ltm/mapper/RowMapper.java</file>
+            <file>file:/C:/Users/Admin/Documents/NetBeansProjects/Btl_Ltm/src/btl_ltm/entity/User.java</file>
         </group>
     </open-files>
 </project-private>

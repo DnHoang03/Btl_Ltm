@@ -4,6 +4,8 @@
  */
 package btl_ltm;
 
+import btl_ltm.entity.User;
+
 /**
  *
  * @author Admin
@@ -15,6 +17,7 @@ public class Btl_Ltm {
      */
     public static void main(String[] args) {
         // TODO code application logic here
+        User user = new User();
     }
     
 }

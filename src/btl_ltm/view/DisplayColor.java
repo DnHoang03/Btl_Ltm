@@ -4,6 +4,15 @@
  */
 package btl_ltm.view;
 
+import btl_ltm.dao.UserDAO;
+import btl_ltm.utils.PopupUtil;
+import java.awt.Color;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Random;
+import javax.swing.JButton;
+
 /**
  *
  * @author Admin
@@ -13,7 +22,23 @@ public class DisplayColor extends javax.swing.JFrame {
     /**
      * Creates new form DisplayColor
      */
+    private UserDAO userDAO = new UserDAO();
+    private List<Color> totalColor = new ArrayList<>();
+    private List<Color> generatedColor = new ArrayList<>();
+    private int totalPoint = 0;
+    private int totalPicked = 0;
+    
     public DisplayColor() {
+        initComponents();
+    }
+
+    public DisplayColor(List<Color> generatedColors) {
+        
+        this.generatedColor.addAll(generatedColors);
+        this.totalColor.addAll(generatedColors);
+        generateColor();
+        Collections.shuffle(this.totalColor);
+
         initComponents();
     }
 
@@ -43,7 +68,7 @@ public class DisplayColor extends javax.swing.JFrame {
         setLocationByPlatform(true);
         setSize(new java.awt.Dimension(500, 400));
 
-        jButton1.setBackground(new java.awt.Color(102, 255, 51));
+        jButton1.setBackground(this.totalColor.get(2));
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
@@ -56,42 +81,42 @@ public class DisplayColor extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font("Javanese Text", 0, 18)); // NOI18N
         jLabel2.setText("00:00");
 
-        jButton3.setBackground(new java.awt.Color(0, 255, 204));
+        jButton3.setBackground(this.totalColor.get(3));
         jButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton3ActionPerformed(evt);
             }
         });
 
-        jButton4.setBackground(new java.awt.Color(0, 0, 0));
+        jButton4.setBackground(this.totalColor.get(4));
         jButton4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton4ActionPerformed(evt);
             }
         });
 
-        jButton5.setBackground(new java.awt.Color(255, 51, 51));
+        jButton5.setBackground(this.totalColor.get(0));
         jButton5.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton5ActionPerformed(evt);
             }
         });
 
-        jButton6.setBackground(new java.awt.Color(204, 0, 204));
+        jButton6.setBackground(this.totalColor.get(5));
         jButton6.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton6ActionPerformed(evt);
             }
         });
 
-        jButton7.setBackground(new java.awt.Color(255, 153, 51));
+        jButton7.setBackground(this.totalColor.get(1));
         jButton7.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton7ActionPerformed(evt);
             }
         });
 
-        jButton8.setBackground(new java.awt.Color(255, 102, 153));
+        jButton8.setBackground(this.totalColor.get(6));
         jButton8.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton8ActionPerformed(evt);
@@ -173,36 +198,43 @@ public class DisplayColor extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
+        clickButton(jButton1);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
+        clickButton(jButton3);
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         // TODO add your handling code here:
+        clickButton(jButton4);
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         // TODO add your handling code here:
+        clickButton(jButton5);
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
         // TODO add your handling code here:
+        clickButton(jButton6);
     }//GEN-LAST:event_jButton6ActionPerformed
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
         // TODO add your handling code here:
+        clickButton(jButton7);
     }//GEN-LAST:event_jButton7ActionPerformed
 
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
         // TODO add your handling code here:
+        clickButton(jButton8);
     }//GEN-LAST:event_jButton8ActionPerformed
 
     private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton9ActionPerformed
-    
+
     /**
      * @param args the command line arguments
      */
@@ -236,6 +268,53 @@ public class DisplayColor extends javax.swing.JFrame {
                 new DisplayColor().setVisible(true);
             }
         });
+    }
+
+    private void generateColor() {
+        while (this.totalColor.size() < 7) {
+            while (true) {
+                Random random = new Random();
+                int red = random.nextInt(256);
+                int green = random.nextInt(256);
+                int blue = random.nextInt(256);
+                boolean equal = false;
+                for (Color color : this.totalColor) {
+                    if (color.getRed() == red && color.getBlue() == blue && color.getGreen() == green) {
+                        equal = true;
+                        break;
+                    }
+                }
+                if (!equal) {
+                    this.totalColor.add(new Color(red, green, blue));
+                    break;
+                }
+            }
+        }
+    }
+    
+    private void clickButton(JButton button) {
+        if(this.generatedColor.contains(button.getBackground())) {
+            PopupUtil.showTemporaryPopup(this, "Chính xác!", 1);
+            addPoint();
+        } else {
+            PopupUtil.showTemporaryPopup(this, "Sai rồi!", 1);
+            addPicked();
+        }
+        
+        button.setEnabled(false);
+    }
+    
+    private void addPoint() {
+        this.totalPoint++;
+    }
+    
+    private void addPicked() {
+        this.totalPicked++;
+        if(this.totalPicked == 3) {
+            PopupUtil.showTemporaryPopup(this, "Bạn đã hết lượt chọn!", 1000);
+            dispose();
+            //change to result frame
+        }
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
