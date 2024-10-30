@@ -1,10 +1,5 @@
 # NetBeans specific files
-nbproject/private/
-nbproject/Makefile-Debug.mk
-nbproject/Makefile-Release.mk
-nbproject/Makefile-Default.mk
-nbproject/project.properties
-nbproject/build-impl.xml
+nbproject/
 
 # Build output
 /build/
@@ -20,7 +15,7 @@ dist/
 Thumbs.db
 
 # Database files
-data/mysql.sock
+data
 *.db
 
 # Other files

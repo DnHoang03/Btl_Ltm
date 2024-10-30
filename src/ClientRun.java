@@ -18,11 +18,13 @@ import java.util.*;
  */
 public class ClientRun {
     public static void main(String[] args) {
-        List<Color> colors = new ArrayList<>();
-        colors.add(new Color(1, 1, 1));
-        colors.add(new Color(55, 55, 55));
-        colors.add(new Color(100, 100, 100));
-        DisplayColor dis = new DisplayColor(colors);
-        dis.setVisible(true);
+//        List<Color> colors = new ArrayList<>();
+//        colors.add(new Color(1, 1, 1));
+//        colors.add(new Color(55, 55, 55));
+//        colors.add(new Color(100, 100, 100));
+//        DisplayColor dis = new DisplayColor(colors);
+//        dis.setVisible(true);
+        Register register = new Register();
+        register.setVisible(true);
     }
 }
