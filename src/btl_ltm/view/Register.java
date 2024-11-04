@@ -123,11 +123,12 @@ public class Register extends javax.swing.JFrame {
         UserLogin user = new UserLogin(userTxt.getText(), passTxt.getText());
         ClientController clientCtr = new ClientController();
         clientCtr.openConnection();
-        clientCtr.sendDataLogin(user);
+        clientCtr.sendDataRegister(user);
         String result = clientCtr.receiveDataAuth();
         System.out.println(result);
         if (result.equals("ok")) {
             showMessage("Login succesfully!");
+            
         } else {
             showMessage("register fail!");
         }

@@ -3,6 +3,7 @@ import btl_ltm.dao.UserDAO;
 import btl_ltm.entity.User;
 import btl_ltm.view.DisplayColor;
 import btl_ltm.view.Login;
+import btl_ltm.view.Rank;
 import btl_ltm.view.Register;
 import java.awt.Color;
 import java.util.*;
@@ -24,7 +25,11 @@ public class ClientRun {
 //        colors.add(new Color(100, 100, 100));
 //        DisplayColor dis = new DisplayColor(colors);
 //        dis.setVisible(true);
-        Register register = new Register();
-        register.setVisible(true);
+        Login login = new Login();
+        login.setVisible(true);
+//          Register register = new Register();
+//          register.setVisible(true);
+//        Rank rank = new Rank();
+//        rank.setVisible(true);
     }
 }

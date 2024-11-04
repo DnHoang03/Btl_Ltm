@@ -120,6 +120,10 @@ public class Login extends javax.swing.JFrame {
         String result = clientCtr.receiveDataAuth();
         if (result.equals("ok")) {
             showMessage("Login succesfully!");
+            menu window = new menu();
+            window.setVisible(true);
+            this.setVisible(false);
+            
         } else {
             showMessage("Invalid username and/or password!");
         }

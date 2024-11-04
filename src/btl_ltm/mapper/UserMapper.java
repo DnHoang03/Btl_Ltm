@@ -19,9 +19,9 @@ public class UserMapper implements RowMapper<User>{
             User user = new User();
             user.setId(rs.getInt("id"));
             user.setUsername(rs.getString("username"));
-            user.setPassword(rs.getString("password"));
+            user.setPassword(rs.getString("pass"));
             user.setScore(rs.getInt("score"));
-            user.setMatch(rs.getInt("match"));
+            user.setMatch(rs.getInt("match_total"));
             return user;
         } catch (SQLException e) {
             e.printStackTrace();
