@@ -7,11 +7,14 @@ package btl_ltm.view;
 import btl_ltm.dao.UserDAO;
 import btl_ltm.utils.PopupUtil;
 import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 import javax.swing.JButton;
+import javax.swing.Timer;
 
 /**
  *
@@ -27,6 +30,7 @@ public class DisplayColor extends javax.swing.JFrame {
     private List<Color> generatedColor = new ArrayList<>();
     private int totalPoint = 0;
     private int totalPicked = 0;
+    private int time = 15;
     
     public DisplayColor() {
         initComponents();
@@ -38,8 +42,9 @@ public class DisplayColor extends javax.swing.JFrame {
         this.totalColor.addAll(generatedColors);
         generateColor();
         Collections.shuffle(this.totalColor);
-
+        
         initComponents();
+        setStartTime();
     }
 
     /**
@@ -61,12 +66,13 @@ public class DisplayColor extends javax.swing.JFrame {
         jButton7 = new javax.swing.JButton();
         jButton8 = new javax.swing.JButton();
         jButton9 = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(249, 246, 246));
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         setLocationByPlatform(true);
-        setSize(new java.awt.Dimension(500, 400));
+        setSize(new java.awt.Dimension(700, 500));
 
         jButton1.setBackground(this.totalColor.get(2));
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -78,8 +84,8 @@ public class DisplayColor extends javax.swing.JFrame {
         jButton2.setFont(new java.awt.Font("Javanese Text", 0, 12)); // NOI18N
         jButton2.setText("Thoát game");
 
-        jLabel2.setFont(new java.awt.Font("Javanese Text", 0, 18)); // NOI18N
-        jLabel2.setText("00:00");
+        jLabel2.setFont(new java.awt.Font("Verdana", 0, 18)); // NOI18N
+        jLabel2.setText("Thời gian còn lại:  15");
 
         jButton3.setBackground(this.totalColor.get(3));
         jButton3.addActionListener(new java.awt.event.ActionListener() {
@@ -131,25 +137,13 @@ public class DisplayColor extends javax.swing.JFrame {
             }
         });
 
+        jLabel3.setFont(new java.awt.Font("Verdana", 0, 18)); // NOI18N
+        jLabel3.setText("Bạn còn " + (3-this.totalPicked) + " lượt chọn");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(50, 50, 50)
-                        .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(62, 62, 62)
-                        .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 68, Short.MAX_VALUE)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(71, 71, 71)
-                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(49, 49, 49))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
@@ -166,12 +160,30 @@ public class DisplayColor extends javax.swing.JFrame {
                     .addComponent(jButton9, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(103, 103, 103))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(50, 50, 50)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel2))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(62, 62, 62)
+                        .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 68, Short.MAX_VALUE)
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(71, 71, 71)
+                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(49, 49, 49))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel2)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(jLabel3))
                 .addGap(70, 70, 70)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -189,10 +201,10 @@ public class DisplayColor extends javax.swing.JFrame {
                             .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jButton9, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(36, Short.MAX_VALUE))
+                .addContainerGap(55, Short.MAX_VALUE))
         );
 
-        setSize(new java.awt.Dimension(714, 507));
+        pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
@@ -265,7 +277,12 @@ public class DisplayColor extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new DisplayColor().setVisible(true);
+                List<Color> colors = new ArrayList<>();
+                colors.add(new Color(1, 1, 1));
+                colors.add(new Color(55, 55, 55));
+                colors.add(new Color(100, 100, 100));
+                DisplayColor dis = new DisplayColor(colors);
+                dis.setVisible(true);
             }
         });
     }
@@ -298,8 +315,8 @@ public class DisplayColor extends javax.swing.JFrame {
             addPoint();
         } else {
             PopupUtil.showTemporaryPopup(this, "Sai rồi!", 1);
-            addPicked();
         }
+        addPicked();
         
         button.setEnabled(false);
     }
@@ -310,11 +327,30 @@ public class DisplayColor extends javax.swing.JFrame {
     
     private void addPicked() {
         this.totalPicked++;
+        jLabel3.setText("Bạn còn " + (3-this.totalPicked) + " lượt chọn");
         if(this.totalPicked == 3) {
             PopupUtil.showTemporaryPopup(this, "Bạn đã hết lượt chọn!", 1000);
             dispose();
             //change to result frame
         }
+    }
+    
+    private void setStartTime() {
+        Timer timer = new Timer(1000, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(time > 0) {
+                    jLabel2.setText("Thời gian còn lại:  " + time);
+                    time--; 
+                }
+                else {
+                    ((Timer) e.getSource()).stop(); // Dừng Timer khi đếm đến 0
+                    jLabel2.setText("Hết giờ!");
+                    dispose();
+                }
+            }
+        });
+        timer.start();
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -328,5 +364,6 @@ public class DisplayColor extends javax.swing.JFrame {
     private javax.swing.JButton jButton8;
     private javax.swing.JButton jButton9;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     // End of variables declaration//GEN-END:variables
 }

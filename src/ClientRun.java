@@ -19,17 +19,26 @@ import java.util.*;
  */
 public class ClientRun {
     public static void main(String[] args) {
-//        List<Color> colors = new ArrayList<>();
-//        colors.add(new Color(1, 1, 1));
-//        colors.add(new Color(55, 55, 55));
-//        colors.add(new Color(100, 100, 100));
-//        DisplayColor dis = new DisplayColor(colors);
-//        dis.setVisible(true);
-        Login login = new Login();
-        login.setVisible(true);
-//          Register register = new Register();
-//          register.setVisible(true);
-//        Rank rank = new Rank();
-//        rank.setVisible(true);
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                List<Color> colors = new ArrayList<>();
+                colors.add(new Color(1, 1, 1));
+                colors.add(new Color(55, 55, 55));
+                colors.add(new Color(100, 100, 100));
+                DisplayColor dis = new DisplayColor(colors);
+                dis.setVisible(true);
+            }
+        });
     }
 }
