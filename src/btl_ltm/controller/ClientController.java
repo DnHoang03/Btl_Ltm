@@ -4,9 +4,13 @@
  */
 package btl_ltm.controller;
 
+import btl_ltm.entity.User;
 import btl_ltm.entity.UserLogin;
 import java.io.*;
 import java.net.Socket;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -24,7 +28,6 @@ public class ClientController {
 
     public Socket openConnection() {
         try {
-
             mySocket = new Socket(serverHost, serverPort);
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -65,7 +68,34 @@ public class ClientController {
 
         return true;
     }
+    
+    public boolean sendMessageGetRanks(){
+        try {
+            ObjectOutputStream oos
+                    = new ObjectOutputStream(mySocket.getOutputStream());
+            oos.writeObject("getRanks");
+            oos.flush();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return false;
+        }
 
+        return true;
+    }
+    
+    public List<User> receiveListRanks(){
+        try {
+            ObjectInputStream ois
+                    = new ObjectInputStream(mySocket.getInputStream());
+            Object o = ois.readObject();
+            List<User> res = (List<User>) o;
+            return res;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return null;
+        }
+    }
+    
     public String receiveDataAuth() {
         try {
             ObjectInputStream ois

@@ -20,10 +20,15 @@ public class UserDAO extends DbContext<User> {
     }
 
     public User getUserByUserNamePassword(String user, String pass) {
-        String query = "SELECT * FROM users WHERE username = ? AND pass = ? LIMIT 1";
-        List<User> users = query(query, new UserMapper(), user, pass);
+        try{
+            String query = "SELECT * FROM users WHERE username = ? AND pass = ? LIMIT 1";
+            List<User> users = query(query, new UserMapper(), user, pass);
 
-        return users == null ? null : users.get(0);
+            return users == null ? null : users.get(0);
+        }
+        catch(Exception ex){
+            return null;
+        }
     }
 
     public void InsertUser(String user, String pass) {
@@ -33,5 +38,16 @@ public class UserDAO extends DbContext<User> {
         } catch (Exception ex) {
             throw ex;
         }
+    }
+    
+    public List<User> GetRanks(){
+        try  {
+            String query = "SELECT * FROM users";
+            List<User> users = query(query, new UserMapper());
+            return users;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

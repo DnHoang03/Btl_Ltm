@@ -36,21 +36,20 @@ public class ServerController {
             ObjectInputStream ois = new ObjectInputStream(clientSocket.getInputStream());
             ObjectOutputStream oos = new ObjectOutputStream(clientSocket.getOutputStream());
 
-            String eventName = (String) ois.readObject();
-            Object o = ois.readObject();
+            String eventName = (String) ois.readObject();           
 
             switch (eventName) {
                 case "login":
+                    Object o = ois.readObject();
                     handleEventLogin(o, oos);
                     break;
                 case "register":
-                    handleEventRegister(o, oos);
+                    Object o1 = ois.readObject();
+                    handleEventRegister(o1, oos);
                     break;
-            }
-
-            if (o instanceof User) {
-                User user = (User) o;
-
+                case "getRanks":
+                    getListRanks(oos);
+                    break;
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -77,6 +76,17 @@ public class ServerController {
             System.out.println("ok");
             oos.writeObject("ok");
             oos.flush();
+        }
+    }
+    
+    private void getListRanks(ObjectOutputStream oos) throws IOException {  
+        try{
+            List<User> result = userDao.GetRanks();
+            oos.writeObject(result);
+            oos.flush();
+        }
+        catch (Exception ex){
+            ex.printStackTrace();
         }
     }
 
