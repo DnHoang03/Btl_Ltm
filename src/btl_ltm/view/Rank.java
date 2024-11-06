@@ -4,6 +4,8 @@
  */
 package btl_ltm.view;
 
+import btl_ltm.controller.ClientController;
+import btl_ltm.entity.User;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -11,7 +13,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import javax.swing.table.DefaultTableModel;
 import java.util.*;
-
 
 /**
  *
@@ -27,12 +28,10 @@ public class Rank extends javax.swing.JFrame {
     public Rank() {
         initComponents();
         model = (DefaultTableModel) jTable1.getModel();
-        loadData(); // Gọi phương thức để tải dữ liệu khi khởi tạo
+        loadData();
 
-        // Thêm hành động cho nút Số trận thắng
         jButton1.addActionListener(evt -> sortByMatchesWon());
 
-        // Thêm hành động cho nút Số trận đấu
         jButton2.addActionListener(evt -> sortByMatchesPlayed());
     }
 
@@ -118,25 +117,17 @@ public class Rank extends javax.swing.JFrame {
     private void loadData() {
         model.setRowCount(0);
 
-        String url = "jdbc:mysql://localhost:3306/duckie";
-        String user = "duckie";
-        String password = "root";
+        ClientController clientCtr = new ClientController();
+        clientCtr.openConnection();
+        clientCtr.sendMessageGetRanks();
+        List<User> result = clientCtr.receiveListRanks();
+        for (User user : result) {
+            int id = user.getId();
+            String name = user.getUsername();
+            int matchesPlayed = user.getScore();
+            int matchesWon = user.getMatch();
 
-        try (Connection conn = DriverManager.getConnection(url, user, password); Statement stmt = conn.createStatement()) {
-            String query = "SELECT id, username, score, match_total FROM users";
-            ResultSet rs = stmt.executeQuery(query);
-
-            while (rs.next()) {
-                int id = rs.getInt("id");
-                String name = rs.getString("username");
-                int matchesPlayed = rs.getInt("score");
-                int matchesWon = rs.getInt("match_total");
-
-                model.addRow(new Object[]{id, name, matchesPlayed, matchesWon});
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
+            model.addRow(new Object[]{id, name, matchesPlayed, matchesWon});
         }
     }
 
@@ -144,7 +135,7 @@ public class Rank extends javax.swing.JFrame {
         model.getDataVector().sort((o1, o2) -> {
             int matchesWon1 = (Integer) ((Vector) o1).get(3);
             int matchesWon2 = (Integer) ((Vector) o2).get(3);
-            return Integer.compare(matchesWon2, matchesWon1); 
+            return Integer.compare(matchesWon2, matchesWon1);
         });
         model.fireTableDataChanged();
     }
