@@ -32,13 +32,10 @@ public class ClientRun {
 
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                List<Color> colors = new ArrayList<>();
-                colors.add(new Color(1, 1, 1));
-                colors.add(new Color(55, 55, 55));
-                colors.add(new Color(100, 100, 100));
-                DisplayColor dis = new DisplayColor(colors);
-                dis.setVisible(true);
+                Login login = new Login();
+                login.setVisible(true);
             }
         });
+        
     }
 }

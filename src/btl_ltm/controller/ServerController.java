@@ -59,8 +59,8 @@ public class ServerController {
     private void handleEventLogin(Object o, ObjectOutputStream oos) throws IOException {
         UserLogin user = (UserLogin) o;
         User result = userDao.getUserByUserNamePassword(user.getUser(), user.getPassword());
-        System.out.println(result != null ? "ok" : "fail");
-        oos.writeObject(result != null ? "ok" : "fail");
+        System.out.println(result != null ? result : null);
+        oos.writeObject(result != null ? result : null);
         oos.flush();
     }
 

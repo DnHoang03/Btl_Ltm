@@ -96,14 +96,14 @@ public class ClientController {
         }
     }
     
-    public String receiveDataAuth() {
+    public User receiveDataAuth() {
         try {
             ObjectInputStream ois
                     = new ObjectInputStream(mySocket.getInputStream());
             Object o = ois.readObject();
-            String res = (String) o;
-            System.out.println(res);
-            return res;
+            User user = (User) o;
+            System.out.println(user);
+            return user;
         } catch (Exception ex) {
             ex.printStackTrace();
             return null;

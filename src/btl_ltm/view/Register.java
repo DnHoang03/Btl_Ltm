@@ -5,6 +5,7 @@
 package btl_ltm.view;
 
 import btl_ltm.controller.ClientController;
+import btl_ltm.entity.User;
 import btl_ltm.entity.UserLogin;
 import java.util.Objects;
 import javax.swing.JOptionPane;
@@ -124,10 +125,10 @@ public class Register extends javax.swing.JFrame {
         ClientController clientCtr = new ClientController();
         clientCtr.openConnection();
         clientCtr.sendDataRegister(user);
-        String result = clientCtr.receiveDataAuth();
-        System.out.println(result);
-        if (result.equals("ok")) {
-            showMessage("Login succesfully!");
+        User u = clientCtr.receiveDataAuth();
+        System.out.println(u);
+        if (u != null) {
+            showMessage("Register succesfully!");
             
         } else {
             showMessage("register fail!");

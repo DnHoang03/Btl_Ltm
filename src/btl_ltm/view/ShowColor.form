@@ -90,6 +90,9 @@
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jToggleButton1ActionPerformed"/>
       </Events>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="jToggleButton1.setRolloverEnabled(false);"/>
+      </AuxValues>
     </Component>
   </SubComponents>
 </Form>

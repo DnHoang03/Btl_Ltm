@@ -4,6 +4,7 @@
  */
 package btl_ltm.view;
 
+import btl_ltm.entity.User;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -25,10 +26,11 @@ public class ShowColor extends javax.swing.JFrame {
      */
     private List<Color> showedColor = new ArrayList<>();
     private int counterStart = 9;
+    private User user;
     
-    public ShowColor() {
+    public ShowColor(User user) {
         Random random = new Random();
-        
+        this.user = user;
         while(showedColor.size() < 3) {
             int red = random.nextInt(256);
             int green = random.nextInt(256);
@@ -72,6 +74,7 @@ public class ShowColor extends javax.swing.JFrame {
             }
         });
 
+        jToggleButton1.setRolloverEnabled(false);
         jToggleButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jToggleButton1ActionPerformed(evt);
@@ -148,7 +151,7 @@ public class ShowColor extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new ShowColor().setVisible(true);
+//                new ShowColor().setVisible(true);
             }
         });
     }
