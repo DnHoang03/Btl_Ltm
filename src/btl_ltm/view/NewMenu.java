@@ -41,7 +41,6 @@ public class NewMenu extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(249, 246, 246));
-        setPreferredSize(new java.awt.Dimension(700, 500));
         setSize(new java.awt.Dimension(700, 500));
 
         jButton1.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N

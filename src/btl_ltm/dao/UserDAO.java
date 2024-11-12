@@ -34,7 +34,7 @@ public class UserDAO extends DbContext<User> {
     public void InsertUser(String user, String pass) {
         try {
             String query = "INSERT INTO users(username, pass) value(?,?) ";
-            insert(query, new UserMapper(), user, pass);
+            insert(query, user, pass);
         } catch (Exception ex) {
             throw ex;
         }
