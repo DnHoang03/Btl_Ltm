@@ -7,9 +7,9 @@ package btl_ltm.view;
 import btl_ltm.controller.ClientController;
 import btl_ltm.entity.User;
 import java.io.IOException;
-import java.util.concurrent.CompletableFuture;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.SwingWorker;
 
 /**
  *
@@ -118,25 +118,34 @@ public class NewMenu extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        ClientController clientCtr = new ClientController();
-        clientCtr.openConnection();
-        clientCtr.sendFindingGame();
-        CompletableFuture<String> future = clientCtr.findGameAsync();
+        SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
+            @Override
+            protected Void doInBackground() throws Exception {
+                // Tạo đối tượng ClientController
+                ClientController clientCtr = new ClientController();
+                clientCtr.openConnection();  // Mở kết nối
+                clientCtr.sendFindingGame();  // Gửi yêu cầu tìm game
 
-        // Luồng chính đợi kết quả từ luồng tìm trận
-        future.thenAccept(message -> {
-            if (message != null) {
-                ShowColor showColor = new ShowColor(this.user);
-                showColor.setVisible(true);
-                dispose();
-            } else {
-                System.out.println("Không tìm được trận hoặc có lỗi xảy ra.");
+                try {
+                    // Nhận dữ liệu từ server mà không làm gián đoạn luồng chính
+                    String message = clientCtr.receiveFindGame();  
+                    // Xử lý thông điệp nhận được từ server (nếu cần)
+                    System.out.println("Thông điệp từ server: " + message);
+                } catch (IOException ex) {
+                    Logger.getLogger(NewMenu.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                return null;  // Phải trả về một giá trị, nhưng không cần thiết sử dụng ở đây
             }
-        }).exceptionally(ex -> {
-            System.err.println("Lỗi xảy ra khi tìm trận: " + ex.getMessage());
-            return null;
-        });
-        
+            
+            @Override
+            protected void done() {
+                // Sau khi công việc trong doInBackground() hoàn thành, bạn có thể cập nhật UI
+                ShowColor showColor = new ShowColor(user);  // Hiển thị giao diện sau khi có thông báo
+                showColor.setVisible(true);
+                dispose();  // Đóng cửa sổ hiện tại
+            }
+        };
+        worker.execute();
         
     }//GEN-LAST:event_jButton1ActionPerformed
 

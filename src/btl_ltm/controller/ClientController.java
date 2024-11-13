@@ -11,7 +11,6 @@ import java.net.Socket;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
 
 /**
  *
@@ -122,34 +121,23 @@ public class ClientController {
         }
     }
     
-    public CompletableFuture<String> findGameAsync() {
-        return CompletableFuture.supplyAsync(() -> {
-            try {
-                ObjectInputStream ois = new ObjectInputStream(mySocket.getInputStream());
-                while (true) {
-                    if (ois.available() > 0) {
-                        try {
-                            Object obj = ois.readObject(); // Chờ đến khi có đối tượng từ server
-                            if (obj instanceof String) {
-                                String message = (String) obj;
-                                System.out.println("Tìm được trận: " + message);
-                                return message; // Trả về thông tin trận đấu khi tìm được
-                            }
-                        } catch (ClassNotFoundException e) {
-                            System.err.println("Không tìm thấy lớp của đối tượng được nhận.");
-                            e.printStackTrace();
-                        } catch (EOFException e) {
-                            System.err.println("Kết nối bị đóng bởi server.");
-                            break; // Thoát vòng lặp nếu server đóng kết nối
-                        }
+    public String receiveFindGame() throws IOException{
+        ObjectInputStream ois = new ObjectInputStream(mySocket.getInputStream());
+        while (true) {
+            if (ois.available() > 0) {
+                try {
+                    Object obj = ois.readObject(); // Chờ đến khi có đối tượng được gửi từ server
+                    if (obj instanceof String) {
+                        String message = (String) obj;
+                        return message;
                     }
+                }  catch (ClassNotFoundException e) {
+                        System.err.println("Không tìm thấy lớp của đối tượng được nhận.");
+                        e.printStackTrace();
                 }
-            } catch (IOException e) {
-                System.err.println("Lỗi khi tạo ObjectInputStream.");
-                e.printStackTrace();
             }
-            return null; // Trả về null nếu không có trận nào
-        });
+
+        }
     }
 
     public boolean closeConnection() {
