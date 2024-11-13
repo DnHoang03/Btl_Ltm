@@ -110,7 +110,6 @@ public class ShowColor extends javax.swing.JFrame {
         );
 
         pack();
-        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -177,7 +176,7 @@ public class ShowColor extends javax.swing.JFrame {
                 else {
                     ((Timer) e.getSource()).stop(); // Dừng Timer khi đếm đến 0
                     jLabel1.setText("Hết giờ!");
-                    DisplayColor dis = new DisplayColor(showedColor);
+                    DisplayColor dis = new DisplayColor(showedColor, user);
                     dis.setVisible(true);
                     dispose();
                 }

@@ -4,7 +4,12 @@
  */
 package btl_ltm.view;
 
+import btl_ltm.controller.ClientController;
 import btl_ltm.entity.User;
+import java.io.IOException;
+import java.util.concurrent.CompletableFuture;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -113,9 +118,25 @@ public class NewMenu extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        ShowColor showColor = new ShowColor(this.user);
-        showColor.setVisible(true);
-        dispose();
+        ClientController clientCtr = new ClientController();
+        clientCtr.openConnection();
+        clientCtr.sendFindingGame();
+        CompletableFuture<String> future = clientCtr.findGameAsync();
+
+        // Luồng chính đợi kết quả từ luồng tìm trận
+        future.thenAccept(message -> {
+            if (message != null) {
+                ShowColor showColor = new ShowColor(this.user);
+                showColor.setVisible(true);
+                dispose();
+            } else {
+                System.out.println("Không tìm được trận hoặc có lỗi xảy ra.");
+            }
+        }).exceptionally(ex -> {
+            System.err.println("Lỗi xảy ra khi tìm trận: " + ex.getMessage());
+            return null;
+        });
+        
         
     }//GEN-LAST:event_jButton1ActionPerformed
 

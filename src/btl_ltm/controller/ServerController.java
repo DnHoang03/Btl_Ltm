@@ -11,7 +11,9 @@ import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -25,6 +27,7 @@ public class ServerController {
     private int serverPort = 8888;
     private UserDAO userDao;
     private static List<Socket> clientSockets = new ArrayList<>();
+    private Queue<Socket> findingUser = new LinkedList<Socket>();
     
     public ServerController() {
         userDao = new UserDAO();
@@ -43,32 +46,6 @@ public class ServerController {
                 new ClientHandler(clientSocket).start();
             }
         } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void listenning() {
-        try {
-            Socket clientSocket = myServer.accept();
-            ObjectInputStream ois = new ObjectInputStream(clientSocket.getInputStream());
-            ObjectOutputStream oos = new ObjectOutputStream(clientSocket.getOutputStream());
-
-            String eventName = (String) ois.readObject();           
-
-            switch (eventName) {
-                case "login":
-                    Object o = ois.readObject();
-                    handleEventLogin(o, oos);
-                    break;
-                case "register":
-                    Object o1 = ois.readObject();
-                    handleEventRegister(o1, oos);
-                    break;
-                case "getRanks":
-                    getListRanks(oos);
-                    break;
-            }
-        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -104,6 +81,16 @@ public class ServerController {
                     case "getRanks":
                         getListRanks(in);
                         break;
+                    case "findGame":
+                        findingUser.add(clientSocket);
+                        if(findingUser.size() == 2) {
+                            ObjectOutputStream inp = new ObjectOutputStream(findingUser.peek().getOutputStream());
+                            inp.writeObject("Accept");
+                            findingUser.poll();
+                            inp = new ObjectOutputStream(findingUser.peek().getOutputStream());
+                            inp.writeObject("Accept");
+                            findingUser.poll();
+                        }
                 }
             } catch (IOException e) {
                 e.printStackTrace();

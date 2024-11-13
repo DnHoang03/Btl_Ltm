@@ -5,6 +5,7 @@
 package btl_ltm.view;
 
 import btl_ltm.dao.UserDAO;
+import btl_ltm.entity.User;
 import btl_ltm.utils.PopupUtil;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
@@ -28,6 +29,7 @@ public class DisplayColor extends javax.swing.JFrame {
     private UserDAO userDAO = new UserDAO();
     private List<Color> totalColor = new ArrayList<>();
     private List<Color> generatedColor = new ArrayList<>();
+    private User user;
     private int totalPoint = 0;
     private int totalPicked = 0;
     private int time = 15;
@@ -36,13 +38,13 @@ public class DisplayColor extends javax.swing.JFrame {
         initComponents();
     }
 
-    public DisplayColor(List<Color> generatedColors) {
+    public DisplayColor(List<Color> generatedColors, User user) {
         
         this.generatedColor.addAll(generatedColors);
         this.totalColor.addAll(generatedColors);
         generateColor();
         Collections.shuffle(this.totalColor);
-        
+        this.user = user;
         initComponents();
         setStartTime();
     }
@@ -245,6 +247,7 @@ public class DisplayColor extends javax.swing.JFrame {
 
     private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
         // TODO add your handling code here:
+        
     }//GEN-LAST:event_jButton9ActionPerformed
 
     /**
@@ -277,12 +280,7 @@ public class DisplayColor extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                List<Color> colors = new ArrayList<>();
-                colors.add(new Color(1, 1, 1));
-                colors.add(new Color(55, 55, 55));
-                colors.add(new Color(100, 100, 100));
-                DisplayColor dis = new DisplayColor(colors);
-                dis.setVisible(true);
+               
             }
         });
     }
@@ -330,7 +328,7 @@ public class DisplayColor extends javax.swing.JFrame {
         jLabel3.setText("Bạn còn " + (3-this.totalPicked) + " lượt chọn");
         if(this.totalPicked == 3) {
             PopupUtil.showTemporaryPopup(this, "Bạn đã hết lượt chọn!", 1000);
-            dispose();
+            endGame();
             //change to result frame
         }
     }
@@ -346,11 +344,17 @@ public class DisplayColor extends javax.swing.JFrame {
                 else {
                     ((Timer) e.getSource()).stop(); // Dừng Timer khi đếm đến 0
                     jLabel2.setText("Hết giờ!");
-                    dispose();
+                    endGame();
                 }
             }
         });
         timer.start();
+    }
+    
+    private void endGame() {
+        Win win = new Win(this.user);
+        win.setVisible(true);
+        dispose();
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
