@@ -30,13 +30,34 @@ public class UserDAO extends DbContext<User> {
             return null;
         }
     }
+    
+    public List<User> getUserByRoomId(int id) {
+        try {
+            String query = "SELECT * FROM users WHERE room_id = ?";
+            return query(query, new UserMapper(), id);
+        } catch(Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 
     public void InsertUser(String user, String pass) {
         try {
             String query = "INSERT INTO users(username, pass) value(?,?) ";
             insert(query, user, pass);
         } catch (Exception ex) {
-            throw ex;
+            ex.printStackTrace();
+        }
+    }
+    
+    public void updateRoomId(int userId, int roomId) {
+        try {
+            String query = "UPDATE users" + 
+                    "SET room_id = ?" +
+                    "WHERE id = ?";
+            update(query, roomId, userId);
+        } catch(Exception e) {
+            e.printStackTrace();
         }
     }
     

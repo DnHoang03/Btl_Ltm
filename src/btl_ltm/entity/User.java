@@ -19,7 +19,8 @@ public class User implements Serializable{
     private String password;
     private Integer score;
     private Integer match;
-
+    private int roomId;
+    
     public User() {}
     
     public User(Integer id, String username, String password, Integer score, Integer match) {
@@ -68,6 +69,14 @@ public class User implements Serializable{
 
     public void setMatch(Integer match) {
         this.match = match;
+    }
+
+    public int getRoomId() {
+        return roomId;
+    }
+
+    public void setRoomId(int roomId) {
+        this.roomId = roomId;
     }
     
     

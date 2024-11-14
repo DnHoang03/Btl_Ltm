@@ -22,6 +22,7 @@ public class UserMapper implements RowMapper<User>{
             user.setPassword(rs.getString("pass"));
             user.setScore(rs.getInt("score"));
             user.setMatch(rs.getInt("match_total"));
+            user.setRoomId(rs.getInt("room_id"));
             return user;
         } catch (SQLException e) {
             e.printStackTrace();

@@ -5,6 +5,7 @@
 package btl_ltm.view;
 
 import btl_ltm.controller.ClientController;
+import btl_ltm.dao.UserDAO;
 import btl_ltm.entity.User;
 import java.io.IOException;
 import java.util.logging.Level;
@@ -21,7 +22,7 @@ public class NewMenu extends javax.swing.JFrame {
      * Creates new form NewMenu
      */
     private User user;
-    
+    private UserDAO userDao = new UserDAO();
     public NewMenu() {
         initComponents();
     }
@@ -118,6 +119,7 @@ public class NewMenu extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
+        jButton1.setEnabled(false);
         SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
             @Override
             protected Void doInBackground() throws Exception {
@@ -125,15 +127,18 @@ public class NewMenu extends javax.swing.JFrame {
                 ClientController clientCtr = new ClientController();
                 clientCtr.openConnection();  // Mở kết nối
                 clientCtr.sendFindingGame();  // Gửi yêu cầu tìm game
-
                 try {
                     // Nhận dữ liệu từ server mà không làm gián đoạn luồng chính
-                    String message = clientCtr.receiveFindGame();  
+                    int message = clientCtr.receiveFindGame();  
+                    
+                    user.setRoomId(message);
+                    userDao.updateRoomId(user.getId(), user.getRoomId());
                     // Xử lý thông điệp nhận được từ server (nếu cần)
                     System.out.println("Thông điệp từ server: " + message);
-                } catch (IOException ex) {
+                } catch (Exception ex) {
                     Logger.getLogger(NewMenu.class.getName()).log(Level.SEVERE, null, ex);
                 }
+                clientCtr.closeConnection();
                 return null;  // Phải trả về một giá trị, nhưng không cần thiết sử dụng ở đây
             }
             

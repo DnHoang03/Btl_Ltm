@@ -4,17 +4,25 @@
  */
 package btl_ltm.view;
 
+import btl_ltm.controller.ClientController;
+import btl_ltm.dao.RoomDAO;
 import btl_ltm.dao.UserDAO;
+import btl_ltm.entity.Room;
 import btl_ltm.entity.User;
 import btl_ltm.utils.PopupUtil;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.ExecutionException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JButton;
+import javax.swing.SwingWorker;
 import javax.swing.Timer;
 
 /**
@@ -27,6 +35,7 @@ public class DisplayColor extends javax.swing.JFrame {
      * Creates new form DisplayColor
      */
     private UserDAO userDAO = new UserDAO();
+    private RoomDAO roomDAO = new RoomDAO();
     private List<Color> totalColor = new ArrayList<>();
     private List<Color> generatedColor = new ArrayList<>();
     private User user;
@@ -85,6 +94,11 @@ public class DisplayColor extends javax.swing.JFrame {
 
         jButton2.setFont(new java.awt.Font("Javanese Text", 0, 12)); // NOI18N
         jButton2.setText("Thoát game");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         jLabel2.setFont(new java.awt.Font("Verdana", 0, 18)); // NOI18N
         jLabel2.setText("Thời gian còn lại:  15");
@@ -247,8 +261,13 @@ public class DisplayColor extends javax.swing.JFrame {
 
     private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
         // TODO add your handling code here:
-        
+        endGame();
     }//GEN-LAST:event_jButton9ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+        dispose();
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -352,9 +371,63 @@ public class DisplayColor extends javax.swing.JFrame {
     }
     
     private void endGame() {
-        Win win = new Win(this.user);
-        win.setVisible(true);
-        dispose();
+        Room room = roomDAO.getRoomById(user.getRoomId());
+        if(room.getWinner()== null) {
+            room.setBestScore(totalPoint);
+            room.setWinner(user.getUsername());
+            room.setTotalCompleted(1);
+            room.setEnable(0);
+            waitEndGame(room);
+        } else if(room.getTotalCompleted() < 1) {
+            room.setTotalCompleted(room.getTotalCompleted()+1);
+            if(room.getBestScore() < totalPoint) {
+                room.setBestScore(totalPoint);
+                room.setWinner(user.getUsername());
+            }
+            if(room.getTotalCompleted() == 1) {
+                waitEndGame(room);
+            }
+        }
+    }
+    
+    private void waitEndGame(Room room) {
+        SwingWorker<Room, Void> worker = new SwingWorker<Room, Void>() {
+            @Override
+            protected Room doInBackground() throws Exception {
+                ClientController clientCtr = new ClientController();
+                clientCtr.openConnection();  // Mở kết nối
+                clientCtr.sendEndGame(room);
+                // Tạo đối tượng ClientController
+                Room room = null;
+                try {
+                    // Nhận dữ liệu từ server mà không làm gián đoạn luồng chính
+                    room = clientCtr.receiveEndGame();  
+                    clientCtr.closeConnection();
+                    // Xử lý thông điệp nhận được từ server (nếu cần)
+                    System.out.println("Thông điệp từ server: " + room);
+                } catch (IOException ex) {
+                    Logger.getLogger(NewMenu.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                return room;  // Phải trả về một giá trị, nhưng không cần thiết sử dụng ở đây
+            }
+            
+            @Override
+            protected void done() {
+                try {
+                    Room room = get();
+                     Win win = new Win(room);  // Hiển thị giao diện sau khi có thông báo
+                    win.setVisible(true);
+                    dispose(); 
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(DisplayColor.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (ExecutionException ex) {
+                    Logger.getLogger(DisplayColor.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                // Sau khi công việc trong doInBackground() hoàn thành, bạn có thể cập nhật UI
+                // Đóng cửa sổ hiện tại
+            }
+        };
+        worker.execute();
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

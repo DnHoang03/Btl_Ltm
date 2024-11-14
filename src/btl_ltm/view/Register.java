@@ -163,6 +163,14 @@ public class Register extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
+        if(userTxt.getText().length() < 6) {
+            showMessage("Tên đăng nhập phải có ít nhất 6 kí tự!");
+            return;
+        }
+        if(passTxt.getText().length() < 6) {
+            showMessage("Mật khẩu phải có ít nhất 6 kí tự!");
+            return;
+        }
         if(!Objects.equals(passTxt.getText(), confirmPassTxt.getText())){
             showMessage("Mật khẩu xác nhận không đúng với mật khẩu đã nhập!");
             return;

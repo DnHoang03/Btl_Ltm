@@ -4,6 +4,7 @@
  */
 package btl_ltm.controller;
 
+import btl_ltm.entity.Room;
 import btl_ltm.entity.User;
 import btl_ltm.entity.UserLogin;
 import java.io.*;
@@ -25,6 +26,12 @@ public class ClientController {
     public ClientController() {
 
     }
+
+    public Socket getMySocket() {
+        return mySocket;
+    }
+    
+    
 
     public Socket openConnection() {
         try {
@@ -61,6 +68,7 @@ public class ClientController {
             oos.flush();
             oos.writeObject(user);
             oos.flush();
+            oos.close();
         } catch (Exception ex) {
             ex.printStackTrace();
             return false;
@@ -89,6 +97,7 @@ public class ClientController {
                     = new ObjectInputStream(mySocket.getInputStream());
             Object o = ois.readObject();
             List<User> res = (List<User>) o;
+            ois.close();
             return res;
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -121,23 +130,78 @@ public class ClientController {
         }
     }
     
-    public String receiveFindGame() throws IOException{
+    
+    public Integer receiveFindGame() throws IOException, ClassNotFoundException {
         ObjectInputStream ois = new ObjectInputStream(mySocket.getInputStream());
-        while (true) {
-            if (ois.available() > 0) {
+        Integer result = null;
+        try {
+            while (result == null) {
                 try {
-                    Object obj = ois.readObject(); // Chờ đến khi có đối tượng được gửi từ server
-                    if (obj instanceof String) {
-                        String message = (String) obj;
-                        return message;
-                    }
-                }  catch (ClassNotFoundException e) {
-                        System.err.println("Không tìm thấy lớp của đối tượng được nhận.");
-                        e.printStackTrace();
+                    Object data = ois.readObject();
+                    if (data instanceof Integer) {
+                        result = (Integer) data;
+                    } else {
+                        throw new IOException("Expected Integer but received " + data.getClass().getName());
+                    } // Đọc trực tiếp đối tượng từ luồng
+                } catch (EOFException e ) {
+                    // Nếu chưa có dữ liệu, tiếp tục chờ
+                    Thread.sleep(100); // Chờ một khoảng thời gian ngắn trước khi thử lại
                 }
             }
-
+        } catch (InterruptedException | IOException ex) {
+            ex.printStackTrace();
         }
+        return result;
+    }
+
+    
+    
+    
+    public void sendEndGame(Room room) {
+        try {
+            ObjectOutputStream oos
+                    = new ObjectOutputStream(mySocket.getOutputStream());
+            oos.writeObject("endGame");
+            oos.flush();
+            oos.writeObject(room);
+            oos.flush();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+    
+    public Room receiveEndGame() throws IOException, ClassNotFoundException{
+        ObjectInputStream ois = new ObjectInputStream(mySocket.getInputStream());
+        Room result = null;
+        try {
+            while (result == null) {
+                try {
+                    result = (Room) ois.readObject();
+                } catch (EOFException e ) {
+                    // Nếu chưa có dữ liệu, tiếp tục chờ
+                    Thread.sleep(100); // Chờ một khoảng thời gian ngắn trước khi thử lại
+                }
+            }
+        } catch (InterruptedException | IOException ex) {
+            ex.printStackTrace();
+        }
+        
+        return result;
+//        while (true) {
+//            if (ois.available() > 0) {
+//                try {
+//                    Object obj = ois.readObject(); // Chờ đến khi có đối tượng được gửi từ server
+//                    if (obj instanceof Room) {
+//                        Room message = (Room) obj;
+//                        return message;
+//                    }
+//                }  catch (ClassNotFoundException e) {
+//                        System.err.println("Không tìm thấy lớp của đối tượng được nhận.");
+//                        e.printStackTrace();
+//                }
+//            }
+//
+//        }
     }
 
     public boolean closeConnection() {

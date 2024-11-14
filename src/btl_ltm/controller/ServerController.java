@@ -4,15 +4,19 @@
  */
 package btl_ltm.controller;
 
+import btl_ltm.dao.RoomDAO;
 import btl_ltm.dao.UserDAO;
+import btl_ltm.entity.Room;
 import btl_ltm.entity.User;
 import btl_ltm.entity.UserLogin;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Queue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -26,11 +30,14 @@ public class ServerController {
     private ServerSocket myServer;
     private int serverPort = 8888;
     private UserDAO userDao;
+    private RoomDAO roomDao;
     private static List<Socket> clientSockets = new ArrayList<>();
     private Queue<Socket> findingUser = new LinkedList<Socket>();
+    private Map<Socket, Integer> rooms = new HashMap<>();
     
     public ServerController() {
         userDao = new UserDAO();
+        roomDao = new RoomDAO();
         try (ServerSocket serverSocket = new ServerSocket(serverPort)) {
             System.out.println("Server is listening on port " + serverPort);
             while (true) {
@@ -83,14 +90,22 @@ public class ServerController {
                         break;
                     case "findGame":
                         findingUser.add(clientSocket);
-                        if(findingUser.size() == 2) {
-                            ObjectOutputStream inp = new ObjectOutputStream(findingUser.peek().getOutputStream());
-                            inp.writeObject("Accept");
+                        if(findingUser.size() == 1) {
+                            Integer currentRoomID = roomDao.insertRoom();
+                            rooms.put(clientSocket, currentRoomID);
+                            in.writeObject(currentRoomID);
+                            in.flush();
                             findingUser.poll();
-                            inp = new ObjectOutputStream(findingUser.peek().getOutputStream());
-                            inp.writeObject("Accept");
-                            findingUser.poll();
+//                            inp = new ObjectOutputStream(findingUser.peek().getOutputStream());
+//                            inp.writeInt(currentRoomID);
+//                            inp.flush();
+//                            findingUser.poll();
                         }
+                        break;
+                    case "endGame":
+                        Object o2 = out.readObject();
+                        handleEventEndgame(o2, in);
+                        break;
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -131,6 +146,22 @@ public class ServerController {
             System.out.println("ok");
             oos.writeObject(userDao.getUserByUserNamePassword(user.getUser(), user.getPassword()));
             oos.flush();
+        }
+    }
+    
+    private void handleEventEndgame(Object o, ObjectOutputStream inp) {
+        try {
+            Room room = (Room) o;
+            for(Map.Entry<Socket, Integer> entry : rooms.entrySet()) {
+                if((int)entry.getValue() == room.getId()) {
+//                    ObjectOutputStream inp = new ObjectOutputStream(entry.getKey().getOutputStream());
+                    inp.writeObject(room);
+                    inp.flush();
+                    rooms.remove(entry.getKey());
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
     
