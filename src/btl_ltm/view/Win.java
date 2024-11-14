@@ -4,6 +4,7 @@
  */
 package btl_ltm.view;
 
+import btl_ltm.entity.Room;
 import btl_ltm.entity.User;
 
 /**
@@ -15,9 +16,9 @@ public class Win extends javax.swing.JFrame {
     /**
      * Creates new form win
      */
-    private User user;
-    public Win(User user) {
-        this.user = user;
+    private Room room;
+    public Win(Room room) {
+        this.room = room;
         initComponents();
     }
 
@@ -55,7 +56,7 @@ public class Win extends javax.swing.JFrame {
 
         jLabel2.setFont(new java.awt.Font("Verdana", 0, 18)); // NOI18N
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel2.setText(this.user.getUsername());
+        jLabel2.setText(this.room.getWinner());
 
         jLabel1.setFont(new java.awt.Font("Javanese Text", 1, 48)); // NOI18N
         jLabel1.setText("Winner");
