@@ -138,7 +138,7 @@ public class NewMenu extends javax.swing.JFrame {
                 } catch (Exception ex) {
                     Logger.getLogger(NewMenu.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                clientCtr.closeConnection();
+//                clientCtr.closeConnection();
                 return null;  // Phải trả về một giá trị, nhưng không cần thiết sử dụng ở đây
             }
             

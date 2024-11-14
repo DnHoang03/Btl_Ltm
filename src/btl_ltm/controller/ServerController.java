@@ -32,7 +32,7 @@ public class ServerController {
     private UserDAO userDao;
     private RoomDAO roomDao;
     private static List<Socket> clientSockets = new ArrayList<>();
-    private Queue<Socket> findingUser = new LinkedList<Socket>();
+    private Queue<ObjectOutputStream> findingUser = new LinkedList<ObjectOutputStream>();
     private Map<Socket, Integer> rooms = new HashMap<>();
     
     public ServerController() {
@@ -89,17 +89,16 @@ public class ServerController {
                         getListRanks(in);
                         break;
                     case "findGame":
-                        findingUser.add(clientSocket);
-                        if(findingUser.size() == 1) {
+                        findingUser.add(in);
+                        if(findingUser.size() == 2) {
                             Integer currentRoomID = roomDao.insertRoom();
                             rooms.put(clientSocket, currentRoomID);
-                            in.writeObject(currentRoomID);
-                            in.flush();
+                            findingUser.peek().writeObject(currentRoomID);
+                            findingUser.peek().flush();
                             findingUser.poll();
-//                            inp = new ObjectOutputStream(findingUser.peek().getOutputStream());
-//                            inp.writeInt(currentRoomID);
-//                            inp.flush();
-//                            findingUser.poll();
+                            findingUser.peek().writeObject(currentRoomID);
+                            findingUser.peek().flush();
+                            findingUser.poll();
                         }
                         break;
                     case "endGame":
@@ -113,14 +112,14 @@ public class ServerController {
                 Logger.getLogger(ServerController.class.getName()).log(Level.SEVERE, null, ex);
             } finally {
                 // Đóng kết nối khi client ngắt kết nối
-                try {
-                    clientSocket.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                synchronized (clientSockets) {
-                    clientSockets.remove(clientSocket);
-                }
+//                try {
+////                    clientSocket.close();
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//                synchronized (clientSockets) {
+//                    clientSockets.remove(clientSocket);
+//                }
                 System.out.println("Client disconnected: " + clientSocket.getInetAddress());
             }
         }
