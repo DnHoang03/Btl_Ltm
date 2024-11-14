@@ -377,14 +377,13 @@ public class DisplayColor extends javax.swing.JFrame {
             room.setWinner(user.getUsername());
             room.setTotalCompleted(1);
             room.setEnable(0);
-            waitEndGame(room);
-        } else if(room.getTotalCompleted() < 1) {
+        } else if(room.getTotalCompleted() < 2) {
             room.setTotalCompleted(room.getTotalCompleted()+1);
             if(room.getBestScore() < totalPoint) {
                 room.setBestScore(totalPoint);
                 room.setWinner(user.getUsername());
             }
-            if(room.getTotalCompleted() == 1) {
+            if(room.getTotalCompleted() == 2) {
                 waitEndGame(room);
             }
         }
